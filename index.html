@@ -27,13 +27,24 @@
       let dx = 1;
       let dy = -4;
       const ballRadius = 10;
+      let ballColor = '#0095DD'
 
       function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = ballColor;
         ctx.fill();
         ctx.closePath();
+      }
+
+      function randomColor() {
+        let hexValues = '1234567890ABCDEF';
+        let hexString = '#';
+        for (let i = 0; i < 6; i++) {
+          hexString += hexValues[Math.floor(Math.random()*16)]
+        }
+        // console.log(hexString)
+        return hexString
       }
 
       function draw() {
@@ -41,9 +52,11 @@
         drawBall();
         if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
           dx = -dx;
+          ballColor = randomColor();
         }
         if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
           dy = -dy;
+          ballColor = randomColor();
         }
         x += dx;
         y += dy;
