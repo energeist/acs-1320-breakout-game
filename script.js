@@ -67,6 +67,14 @@ function randomColor() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, "violet");
+  gradient.addColorStop(0.25, "pink");
+  gradient.addColorStop(0.5, "red");
+  gradient.addColorStop(0.75, "pink");
+  gradient.addColorStop(1, "violet");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawBricks();
   drawBall();
   drawPaddle();
