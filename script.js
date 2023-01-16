@@ -26,7 +26,7 @@ let lives = 3;
 let totalBricks = 0;
 
 for (let r = 0; r < brickRowCount; r++) {
-  bricks[r] = []
+  bricks[r] = [];
   if (r % 2 == 0) {
     brickWidth = startBrickWidth / 2;
     brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));  
@@ -147,7 +147,7 @@ function mouseMoveHandler(e) {
 }
 
 function drawBricks() {
-  brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066']
+  brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
   for (let r = 0; r < brickRowCount; r++) {
     if (r % 2 == 0) {
       brickWidth = startBrickWidth / 2;
@@ -191,6 +191,11 @@ function collisionDetection() {
           y < b.y + brickHeight + ballRadius
         ) {
           dy = -(dy + 1);
+          if (dx < 0) {
+            dx = dx - 0.1;
+          } else {
+            dx = dx + 0.1;
+          }
           b.status = 0;
           ballColor = randomColor();
           score++;
