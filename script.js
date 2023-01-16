@@ -28,8 +28,8 @@ let totalBricks = 0;
 for (let r = 0; r < brickRowCount; r++) {
   bricks[r] = []
   if (r % 2 == 0) {
-    brickWidth = startBrickWidth / 2
-    brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding))  
+    brickWidth = startBrickWidth / 2;
+    brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));  
   } else {
     brickWidth = startBrickWidth;
     brickColumnCount = startBrickColumnCount;
@@ -79,9 +79,11 @@ function draw() {
   }
   if (y + dy < ballRadius) {
     dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
+    ballColor = randomColor();
+  } else if (y + dy > canvas.height - ballRadius - paddleHeight) {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -(dy + 1);
+      ballColor = randomColor();
     } else {
       lives--;
       if (!lives) {
@@ -148,8 +150,8 @@ function drawBricks() {
   brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066']
   for (let r = 0; r < brickRowCount; r++) {
     if (r % 2 == 0) {
-      brickWidth = startBrickWidth / 2
-      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding))  
+      brickWidth = startBrickWidth / 2;
+      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
     } else {
       brickWidth = startBrickWidth;
       brickColumnCount = startBrickColumnCount;
@@ -173,8 +175,8 @@ function drawBricks() {
 function collisionDetection() {
   for (let r = 0; r < brickRowCount; r++) {
     if (r % 2 == 0) {
-      brickWidth = startBrickWidth / 2
-      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding))  
+      brickWidth = startBrickWidth / 2;
+      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
     } else {
       brickWidth = startBrickWidth;
       brickColumnCount = startBrickColumnCount;
