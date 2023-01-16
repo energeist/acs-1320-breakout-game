@@ -44,17 +44,6 @@ for (let r = 0; r < brickRowCount; r++) {
   }
 } 
 
-// for (let c = 0; c < brickColumnCount; c++) {
-//   bricks[c] = [];
-//   for (let r = 0; r < brickRowCount; r++) {
-//     bricks[c][r] = { 
-//       x: 0,
-//       y: 0, 
-//       status: 1 
-//     };
-//   }
-// }
-
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
@@ -155,26 +144,6 @@ function mouseMoveHandler(e) {
   }
 }
 
-// function drawBricks() {
-//   brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066']
-//   for (let c = 0; c < brickColumnCount; c++) {
-//     for (let r = 0; r < brickRowCount; r++) {
-//       if (bricks[c][r].status === 1) {
-//         const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-//         const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-//         bricks[c][r].x = brickX;
-//         bricks[c][r].y = brickY;
-//         ctx.beginPath();
-//         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-//         //ctx.fillStyle = "#0095DD";
-//         ctx.fillStyle = brickColors[c];
-//         ctx.fill();
-//         ctx.closePath();
-//       }
-//     }
-//   }
-// }
-
 function drawBricks() {
   brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066']
   for (let r = 0; r < brickRowCount; r++) {
@@ -193,7 +162,6 @@ function drawBricks() {
         bricks[r][c].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        //ctx.fillStyle = "#0095DD";
         ctx.fillStyle = brickColors[c];
         ctx.fill();
         ctx.closePath();
@@ -215,10 +183,10 @@ function collisionDetection() {
       const b = bricks[r][c];
       if (b.status === 1) {
         if (
-          x > b.x &&
-          x < b.x + brickWidth &&
-          y > b.y &&
-          y < b.y + brickHeight
+          x > b.x - ballRadius &&
+          x < b.x + brickWidth + ballRadius &&
+          y > b.y - ballRadius &&
+          y < b.y + brickHeight + ballRadius
         ) {
           dy = -(dy + 1);
           b.status = 0;
@@ -234,32 +202,6 @@ function collisionDetection() {
     }
   }
 }
-
-// function collisionDetection() {
-//   for (let c = 0; c < brickColumnCount; c++) {
-//     for (let r = 0; r < brickRowCount; r++) {
-//       const b = bricks[c][r];
-//       if (b.status === 1) {
-//         if (
-//           x > b.x &&
-//           x < b.x + brickWidth &&
-//           y > b.y &&
-//           y < b.y + brickHeight
-//         ) {
-//           dy = -(dy + 1);
-//           b.status = 0;
-//           ballColor = randomColor();
-//           score++;
-//           if (score === brickRowCount * brickColumnCount) {
-//             alert(`YOU WIN, CONGRATULATIONS! YOUR SCORE WAS ${score} POINTS!`);
-//             document.location.reload();
-//             clearInterval(interval); // Needed for Chrome to end game
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
 
 function drawScore() {
   ctx.font = "16px Arial";
