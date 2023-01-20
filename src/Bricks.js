@@ -1,4 +1,4 @@
-import Brick from './brick';
+import Brick from './Brick';
 
 class Bricks extends Brick {
 

@@ -1,7 +1,11 @@
-import Ball from './ball';
-import Brick from './brick';
-import Bricks from './bricks';
-import Paddle from './paddle';
+/* eslint-disable import/extensions */
+/* eslint-disable no-console */
+
+import Ball from './Ball.js';
+import Brick from './Brick.js';
+import Bricks from './Bricks.js';
+// import Paddle from './paddle.js';
+console.log('this is main');
 
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
@@ -31,6 +35,7 @@ let lives = 3;
 let totalBricks = 0;
 
 const ball = new Ball(200, 200, 10, 'blue');
+ball.render(ctx);
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
