@@ -34,6 +34,11 @@ class Ball {
     this.color = color;
   }
 
+  moveBall() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
   render(ctx) {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -120,6 +125,19 @@ class Paddle {
     this.height = height;
     this.color = color;
   }
+
+  render(ctx) {
+    ctx.beginPath();
+    ctx.rect(this.x, this.x, this.width, this.height);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  moveBy(dx, dy) {
+    this.x += dx;
+    this.y += dy;
+  }
 }
 
 const paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 'blue');
@@ -152,14 +170,6 @@ function randomColor() {
   return hexString;
 }
 
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = '#0095DD';
-  ctx.fill();
-  ctx.closePath();
-}
-
 function keyDownHandler(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = true;
@@ -178,18 +188,26 @@ function keyUpHandler(e) {
 
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX > 0 && relativeX < (canvas.width - paddleWidth / 2)) {
-    paddleX = relativeX - paddleWidth / 2;
-  } else if (relativeX < (paddleWidth / 2 + canvas.offsetLeft)) {
-    paddleX = 0;
+  if (relativeX > 0 && relativeX < (canvas.width - paddle.width / 2)) {
+    paddle.x = relativeX - paddle.width / 2;
+  } else if (relativeX < (paddle.width / 2 + canvas.offsetLeft)) {
+    paddle.x = 0;
   } else if (relativeX > canvas.width) {
-    paddleX = canvas.width - paddleWidth;
+    paddle.x = canvas.width - paddle.width;
   }
 }
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
+
+function movePaddle() {
+  if (rightPressed) {
+    paddle.moveBy(7, 0);
+  } else if (leftPressed) {
+    paddle.moveBy(0, 7);
+  }
+}
 
 function collisionDetection() {
   for (let r = 0; r < bricks.rows; r += 1) {
@@ -256,15 +274,15 @@ function draw() {
   collisionDetection();
   drawScore();
   drawLives();
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+  if (x + dx > canvas.width - ball.radius || x + dx < ball.radius) {
     dx = -dx;
-    ballColor = randomColor();
+    ball.color = randomColor();
   }
-  if (y + dy < ballRadius) {
+  if (y + dy < ball.radius) {
     dy = -dy;
     ballColor = randomColor();
-  } else if (y + dy > canvas.height - ballRadius - paddleHeight) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
+  } else if (y + dy > canvas.height - ball.radius - paddle.height) {
+    if (x > paddle.x && x < paddle.x + paddle.width) {
       dy = -(dy + 1);
       ballColor = randomColor();
     } else {
@@ -277,15 +295,15 @@ function draw() {
         y = canvas.height - 30;
         dx = 2;
         dy = -2;
-        paddleX = (canvas.width - paddleWidth) / 2;
+        paddle.x = (canvas.width - paddle.width) / 2;
       }
     }
   }
 
   if (rightPressed) {
-    paddleX = Math.min(paddleX + 7, canvas.width - paddleWidth);
+    paddle.moveBy(7, 0);
   } else if (leftPressed) {
-    paddleX = Math.max(paddleX - 7, 0);
+    paddle.moveBy(0, 7);
   }
 
   x += dx;
