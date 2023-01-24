@@ -1,57 +1,147 @@
+/* eslint-disable max-len */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-alert */
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 1;
-let dy = -4;
+let ballColor = 'blue';
 const ballRadius = 10;
-let ballColor = '#0095DD';
-const paddleHeight = 15;
-const paddleWidth = 95;
-let paddleX = (canvas.width - paddleWidth) / 2;
-let rightPressed = false;
-let leftPressed = false;
+const paddleHeight = 10;
+const paddleWidth = 55;
 const brickRowCount = 3;
 const startBrickColumnCount = 5;
-let brkColumnCount = startBrickColumnCount;
 const startBrickWidth = 75;
 let brickWidth = startBrickWidth;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
-const bricks = [];
+let paddleX = (canvas.width - paddleWidth) / 2;
+const paddleY = (canvas.height - paddleHeight);
+let brickColumnCount = startBrickColumnCount;
 let score = 0;
 let lives = 3;
 let totalBricks = 0;
+let rightPressed = false;
+let leftPressed = false;
 
-for (let r = 0; r < brickRowCount; r += 1) {
-  bricks[r] = [];
-  if (r % 2 === 0) {
-    brickWidth = startBrickWidth / 2;
-    brkColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
-  } else {
-    brickWidth = startBrickWidth;
-    brkColumnCount = startBrickColumnCount;
+class Ball {
+  constructor(x = 0, y = 0, dx = 2, dy = -1, radius = 10, color = 'red') {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = -dy;
+    this.radius = radius;
+    this.color = color;
   }
-  for (let c = 0; c < brkColumnCount; c += 1) {
-    bricks[r][c] = {
-      x: 0,
-      y: 0,
-      status: 1,
-    };
-    totalBricks += 1;
+
+  render(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = ballColor;
+    ctx.fill();
+    ctx.closePath();
   }
 }
 
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = ballColor;
-  ctx.fill();
-  ctx.closePath();
+class Brick {
+  constructor(x, y, width, height, color) {
+    this.x = x;
+    this.y = y;
+    this.status = 1;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+  }
+
+  render(ctx) {
+    ctx.beginPath();
+    ctx.rect(this.x, this.y, this.brickWidth, this.brickHeight);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
+  }
 }
+
+class Bricks {
+  constructor(cols, rows) {
+    this.cols = cols;
+    this.rows = rows;
+    this.bricks = [];
+    this.initializeBricks();
+  }
+
+  initializeBricks() {
+    const objectColor = 'blue';
+    for (let r = 0; r < this.brickRowCount; r += 1) {
+      this.bricks[r] = [];
+      if (r % 2 === 0) {
+        brickWidth = startBrickWidth / 2;
+        brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+      } else {
+        brickWidth = startBrickWidth;
+        brickColumnCount = this.startBrickColumnCount;
+      }
+      for (let c = 0; c < brickColumnCount; c += 1) {
+        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+        this.bricks[r][c] = new Brick(brickX, brickY, brickWidth, brickHeight, objectColor);
+        totalBricks += 1;
+      }
+    }
+  }
+
+  render(ctx) {
+    const brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
+    for (let r = 0; r < brickRowCount; r += 1) {
+      if (r % 2 === 0) {
+        brickWidth = startBrickWidth / 2;
+        brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+      } else {
+        brickWidth = startBrickWidth;
+        brickColumnCount = startBrickColumnCount;
+      }
+      for (let c = 0; c < brickColumnCount; c += 1) {
+        const brick = this.bricks[r][c];
+        if (brick.status === 1) {
+          brick.render(ctx);
+        }
+      }
+    }
+  }
+}
+
+const bricks = new Bricks(startBrickColumnCount, brickRowCount);
+
+class Paddle {
+  constructor(x, y, width, height, color = 'blue') {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+  }
+}
+
+const paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 'blue');
+
+class Score {
+
+}
+
+class Lives {
+
+}
+
+class Game {
+
+}
+
+let x = canvas.width / 2;
+let y = canvas.height - 30;
+let dx = 1;
+let dy = -4;
+
+let ball = new Ball(0, 0, 2, 2, 10, 'blue');
 
 function randomColor() {
   const hexValues = '1234567890ABCDEF';
@@ -101,49 +191,23 @@ document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
-function drawBricks() {
-  const brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
-  for (let r = 0; r < brickRowCount; r += 1) {
-    if (r % 2 === 0) {
-      brickWidth = startBrickWidth / 2;
-      brkColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
-    } else {
-      brickWidth = startBrickWidth;
-      brkColumnCount = startBrickColumnCount;
-    }
-    for (let c = 0; c < brkColumnCount; c += 1) {
-      if (bricks[r][c].status === 1) {
-        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-        bricks[r][c].x = brickX;
-        bricks[r][c].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = brickColors[c];
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
-}
-
 function collisionDetection() {
-  for (let r = 0; r < brickRowCount; r += 1) {
+  for (let r = 0; r < bricks.rows; r += 1) {
     if (r % 2 === 0) {
       brickWidth = startBrickWidth / 2;
-      brkColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
     } else {
       brickWidth = startBrickWidth;
-      brkColumnCount = startBrickColumnCount;
+      brickColumnCount = startBrickColumnCount;
     }
-    for (let c = 0; c < brkColumnCount; c += 1) {
-      const b = bricks[r][c];
-      if (b.status === 1) {
+    for (let c = 0; c < bricks.cols; c += 1) {
+      const brick = bricks.bricks[r][c];
+      if (brick.status === 1) {
         if (
-          x > b.x - ballRadius
-          && x < b.x + brickWidth + ballRadius
-          && y > b.y - ballRadius
-          && y < b.y + brickHeight + ballRadius
+          ball.x > brick.x - ball.ballRadius
+          && ball.x < brick.x + brickWidth + ball.ballRadius
+          && ball.y > brick.y - ball.ballRadius
+          && ball.y < brick.y + brickHeight + ball.ballRadius
         ) {
           dy = -(dy + 1);
           if (dx < 0) {
@@ -151,7 +215,7 @@ function collisionDetection() {
           } else {
             dx += 0.1;
           }
-          b.status = 0;
+          brick.status = 0;
           ballColor = randomColor();
           score += 1;
           if (score === totalBricks) {
@@ -186,8 +250,8 @@ function draw() {
   gradient.addColorStop(1, 'violet');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
-  drawBall();
+  bricks.render(ctx);
+  ball.render(ctx);
   drawPaddle();
   collisionDetection();
   drawScore();
