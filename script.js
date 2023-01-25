@@ -3,26 +3,24 @@
 /* eslint-disable no-alert */
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-let ballColor = 'blue';
-const ballRadius = 10;
+
+const ballColor = 'blue';
+
+// const ballRadius = 10;
 const paddleHeight = 10;
 const paddleWidth = 55;
 const brickRowCount = 3;
 const startBrickColumnCount = 5;
-const startBrickWidth = 75;
-let brickWidth = startBrickWidth;
+// const startBrickWidth = 75;
+// let brickWidth = startBrickWidth;
+const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
-let paddleX = (canvas.width - paddleWidth) / 2;
+const paddleX = (canvas.width - paddleWidth) / 2;
 const paddleY = (canvas.height - paddleHeight);
-let brickColumnCount = startBrickColumnCount;
-let score = 0;
-let lives = 3;
-let totalBricks = 0;
-let rightPressed = false;
-let leftPressed = false;
+// const brickColumnCount = startBrickColumnCount;
 
 class Ball {
   constructor(x = 0, y = 0, dx = 2, dy = -1, radius = 10, color = 'red') {
@@ -76,46 +74,68 @@ class Bricks {
   }
 
   initializeBricks() {
-    const objectColor = 'blue';
-    for (let r = 0; r < this.brickRowCount; r += 1) {
-      this.bricks[r] = [];
-      if (r % 2 === 0) {
-        brickWidth = startBrickWidth / 2;
-        brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
-      } else {
-        brickWidth = startBrickWidth;
-        brickColumnCount = this.startBrickColumnCount;
-      }
-      for (let c = 0; c < brickColumnCount; c += 1) {
-        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-        this.bricks[r][c] = new Brick(brickX, brickY, brickWidth, brickHeight, objectColor);
-        totalBricks += 1;
+    for (let c = 0; c < this.cols; c += 1) {
+      this.bricks[c] = [];
+      for (let r = 0; r < this.rows; r += 1) {
+        const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+        this.bricks[c][r] = new Brick(brickX, brickY, brickWidth, brickHeight, 'blue');
       }
     }
   }
 
   render(ctx) {
-    const brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
-    for (let r = 0; r < brickRowCount; r += 1) {
-      if (r % 2 === 0) {
-        brickWidth = startBrickWidth / 2;
-        brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
-      } else {
-        brickWidth = startBrickWidth;
-        brickColumnCount = startBrickColumnCount;
-      }
-      for (let c = 0; c < brickColumnCount; c += 1) {
-        const brick = this.bricks[r][c];
+    for (let c = 0; c < this.cols; c += 1) {
+      for (let r = 0; r < this.rows; r += 1) {
+        const brick = this.bricks[c][r];
         if (brick.status === 1) {
           brick.render(ctx);
         }
       }
     }
   }
-}
 
-const bricks = new Bricks(startBrickColumnCount, brickRowCount);
+  // STRETCH CHALLENGE BRICKS
+  // initializeBricks() {
+  //   const objectColor = 'blue';
+  //   for (let r = 0; r < this.brickRowCount; r += 1) {
+  //     this.bricks[r] = [];
+  //     if (r % 2 === 0) {
+  //       brickWidth = startBrickWidth / 2;
+  //       brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+  //     } else {
+  //       brickWidth = startBrickWidth;
+  //       brickColumnCount = this.startBrickColumnCount;
+  //     }
+  //     for (let c = 0; c < brickColumnCount; c += 1) {
+  //       const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+  //       const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+  //       this.bricks[r][c] = new Brick(brickX, brickY, brickWidth, brickHeight, objectColor);
+  //       totalBricks += 1;
+  //     }
+  //   }
+  // }
+
+  // STRETCH CHALLENGE BRICKS
+  // render(ctx) {
+  //   const brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
+  //   for (let r = 0; r < brickRowCount; r += 1) {
+  //     if (r % 2 === 0) {
+  //       brickWidth = startBrickWidth / 2;
+  //       brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+  //     } else {
+  //       brickWidth = startBrickWidth;
+  //       brickColumnCount = startBrickColumnCount;
+  //     }
+  //     for (let c = 0; c < brickColumnCount; c += 1) {
+  //       const brick = this.bricks[r][c];
+  //       if (brick.status === 1) {
+  //         brick.render(ctx);
+  //       }
+  //     }
+  //   }
+  // }
+}
 
 class Paddle {
   constructor(x, y, width, height, color = 'blue') {
@@ -138,177 +158,218 @@ class Paddle {
     this.x += dx;
     this.y += dy;
   }
+
+  moveTo(x, y) {
+    this.x = x;
+    this.y = y;
+  }
 }
 
-const paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 'blue');
+class GameLabel {
+  constructor(text, x, y, color = 'blue', font = '16px Arial') {
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.value = 0;
+    this.font = font;
+  }
 
-class Score {
-
-}
-
-class Lives {
-
+  render(ctx) {
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText(`${this.text} ${this.value}`, this.x, this.y);
+  }
 }
 
 class Game {
-
-}
-
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 1;
-let dy = -4;
-
-let ball = new Ball(0, 0, 2, 2, 10, 'blue');
-
-function randomColor() {
-  const hexValues = '1234567890ABCDEF';
-  let hexString = '#';
-  for (let i = 0; i < 6; i += 1) {
-    hexString += hexValues[Math.floor(Math.random() * 16)];
+  constructor() {
+    this.ball = new Ball(0, 0, 2, 2, 10, 'blue');
+    this.bricks = new Bricks(startBrickColumnCount, brickRowCount);
+    this.paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 'blue');
+    this.scoreLabel = new GameLabel('Score: ', 8, 20);
+    this.livesLabel = new GameLabel('Lives: ', canvas.width - 65, 20);
+    this.rightPressed = false;
+    this.leftPressed = false;
+    this.setup();
+    this.draw();
   }
-  return hexString;
-}
 
-function keyDownHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
-    rightPressed = true;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    leftPressed = true;
+  resetBallAndPaddle() {
+    this.ball.x = canvas.width / 2;
+    this.ball.y = canvas.height - 30;
+    this.ball.dx = 2;
+    this.ball.dy = -2;
+    this.paddle.x = paddleX;
   }
-}
 
-function keyUpHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
-    rightPressed = false;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    leftPressed = false;
-  }
-}
-
-function mouseMoveHandler(e) {
-  const relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX > 0 && relativeX < (canvas.width - paddle.width / 2)) {
-    paddle.x = relativeX - paddle.width / 2;
-  } else if (relativeX < (paddle.width / 2 + canvas.offsetLeft)) {
-    paddle.x = 0;
-  } else if (relativeX > canvas.width) {
-    paddle.x = canvas.width - paddle.width;
-  }
-}
-
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-document.addEventListener('mousemove', mouseMoveHandler, false);
-
-function movePaddle() {
-  if (rightPressed) {
-    paddle.moveBy(7, 0);
-  } else if (leftPressed) {
-    paddle.moveBy(0, 7);
-  }
-}
-
-function collisionDetection() {
-  for (let r = 0; r < bricks.rows; r += 1) {
-    if (r % 2 === 0) {
-      brickWidth = startBrickWidth / 2;
-      brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
-    } else {
-      brickWidth = startBrickWidth;
-      brickColumnCount = startBrickColumnCount;
+  randomColor() {
+    const hexValues = '1234567890ABCDEF';
+    this.hexString = '#';
+    for (let i = 0; i < 6; i += 1) {
+      this.hexString += hexValues[Math.floor(Math.random() * 16)];
     }
-    for (let c = 0; c < bricks.cols; c += 1) {
-      const brick = bricks.bricks[r][c];
-      if (brick.status === 1) {
-        if (
-          ball.x > brick.x - ball.ballRadius
-          && ball.x < brick.x + brickWidth + ball.ballRadius
-          && ball.y > brick.y - ball.ballRadius
-          && ball.y < brick.y + brickHeight + ball.ballRadius
-        ) {
-          dy = -(dy + 1);
-          if (dx < 0) {
-            dx -= 0.1;
-          } else {
-            dx += 0.1;
-          }
-          brick.status = 0;
-          ballColor = randomColor();
-          score += 1;
-          if (score === totalBricks) {
-            alert(`YOU WIN, CONGRATULATIONS! YOUR SCORE WAS ${score} POINTS!`);
-            document.location.reload();
+    return this.hexString;
+  }
+
+  collisionDetection() {
+    for (let c = 0; c < this.bricks.cols; c += 1) {
+      for (let r = 0; r < this.bricks.rows; r += 1) {
+        const brick = this.bricks.bricks[c][r];
+        if (brick.status === 1) {
+          if (this.ball.x > brick.x - this.ball.ballRadius
+            && this.ball.x < brick.x + brickWidth + this.ball.ballRadius
+            && this.ball.y > brick.y - this.ball.ballRadius
+            && this.ball.y < brick.y + brickHeight + this.ball.ballRadius
+          ) {
+            this.ball.dy = -(this.ball.dy + 1);
+            if (this.ball.dx < 0) {
+              this.ball.dx -= 0.1;
+            } else {
+              this.ball.dx += 0.1;
+            }
+            brick.status = 0;
           }
         }
       }
     }
   }
-}
 
-function drawScore() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
-  ctx.fillText(`Score: ${score}`, 8, 20);
-}
+  // STRETCH BRICKS
+  // collisionDetection() {
+  //   for (let r = 0; r < this.bricks.rows; r += 1) {
+  //     if (r % 2 === 0) {
+  //       brickWidth = startBrickWidth / 2;
+  //       brickColumnCount = Math.floor((canvas.width - (brickOffsetLeft)) / (brickWidth + brickPadding));
+  //     } else {
+  //       brickWidth = startBrickWidth;
+  //       brickColumnCount = startBrickColumnCount;
+  //     }
+  //     for (let c = 0; c < this.bricks.cols; c += 1) {
+  //       const brick = this.bricks.bricks[r][c];
+  //       if (brick.status === 1) {
+  //         if (
+  //           this.ball.x > brick.x - this.ball.ballRadius
+  //           && this.ball.x < brick.x + brickWidth + this.ball.ballRadius
+  //           && this.ball.y > brick.y - this.ball.ballRadius
+  //           && this.ball.y < brick.y + brickHeight + this.ball.ballRadius
+  //         ) {
+  //           this.ball.dy = -(this.ball.dy + 1);
+  //           if (this.ball.dx < 0) {
+  //             this.ball.dx -= 0.1;
+  //           } else {
+  //             this.ball.dx += 0.1;
+  //           }
+  //           brick.status = 0;
+  //           ballColor = this.randomColor();
+  //           this.scoreLabel.value += 1;
+  //           if (this.scoreLabel.value === totalBricks) {
+  //             alert(`YOU WIN, CONGRATULATIONS! YOUR SCORE WAS ${this.scoreLabel.value} POINTS!`);
+  //             document.location.reload();
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-function drawLives() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
-}
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  gradient.addColorStop(0, 'violet');
-  gradient.addColorStop(0.25, 'pink');
-  gradient.addColorStop(0.5, 'red');
-  gradient.addColorStop(0.75, 'pink');
-  gradient.addColorStop(1, 'violet');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  bricks.render(ctx);
-  ball.render(ctx);
-  drawPaddle();
-  collisionDetection();
-  drawScore();
-  drawLives();
-  if (x + dx > canvas.width - ball.radius || x + dx < ball.radius) {
-    dx = -dx;
-    ball.color = randomColor();
+  movePaddle() {
+    if (this.rightPressed && this.paddle.x < canvas.width - this.paddle.width) {
+      this.paddle.moveBy(7, 0);
+    } else if (this.leftPressed && this.paddle.x > 0) {
+      this.paddle.moveBy(0, 7);
+    }
   }
-  if (y + dy < ball.radius) {
-    dy = -dy;
-    ballColor = randomColor();
-  } else if (y + dy > canvas.height - ball.radius - paddle.height) {
-    if (x > paddle.x && x < paddle.x + paddle.width) {
-      dy = -(dy + 1);
-      ballColor = randomColor();
-    } else {
-      lives -= 1;
-      if (!lives) {
-        alert(`GAME OVER... YOUR SCORE WAS ${score} POINTS`);
-        document.location.reload();
+
+  collisionsWithCanvasAndPaddle() {
+    if (this.ball.x + this.ball.dx > canvas.width - this.ball.radius
+      || this.ball.x + this.ball.x < this.ball.radius) {
+      this.ball.dx = -this.ball.dx;
+      this.ball.color = this.randomColor();
+    }
+    if (this.ball.y + this.ball.dy < this.ball.radius) {
+      this.ball.dy = -this.ball.dy;
+      this.ball.color = this.randomColor();
+    } else if (this.ball.y + this.ball.dy > canvas.height - this.ball.radius - this.paddle.height) {
+      if (this.ball.x > this.paddle.x && this.ball.x < this.paddle.x + this.paddle.width) {
+        this.ball.dy = -(this.ball.dy + 1);
+        this.ball.color = this.randomColor();
       } else {
-        x = canvas.width / 2;
-        y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
-        paddle.x = (canvas.width - paddle.width) / 2;
+        this.livesLabel.value -= 1;
+        if (this.livesLabel.value === 0) {
+          alert(`GAME OVER... YOUR SCORE WAS ${this.scoreLabel.value} POINTS`);
+          document.location.reload();
+        } else {
+          this.resetBallAndPaddle();
+        }
       }
     }
   }
 
-  if (rightPressed) {
-    paddle.moveBy(7, 0);
-  } else if (leftPressed) {
-    paddle.moveBy(0, 7);
+  keyDownHandler(evt) {
+    if (evt.key === 'Right' || evt.key === 'ArrowRight') {
+      this.rightPressed = true;
+    } else if (evt.key === 'Left' || evt.key === 'ArrowLeft') {
+      this.leftPressed = true;
+    }
   }
 
-  x += dx;
-  y += dy;
-  requestAnimationFrame(draw);
+  keyUpHandler(evt) {
+    if (evt.key === 'Right' || evt.key === 'ArrowRight') {
+      this.rightPressed = false;
+    } else if (evt.key === 'Left' || evt.key === 'ArrowLeft') {
+      this.leftPressed = false;
+    }
+  }
+
+  mouseMoveHandler(evt) {
+    this.relativeX = evt.clientX - canvas.offsetLeft;
+    if (this.relativeX > 0 && this.relativeX < (canvas.width - this.paddle.width / 2)) {
+      this.paddle.moveTo(this.relativeX - this.paddle.width / 2, paddleY);
+    }
+  }
+
+  draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // add gradient
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'violet');
+    gradient.addColorStop(0.25, 'pink');
+    gradient.addColorStop(0.5, 'red');
+    gradient.addColorStop(0.75, 'pink');
+    gradient.addColorStop(1, 'violet');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    this.bricks.render(ctx);
+    this.ball.render(ctx);
+    this.paddle.render(ctx);
+    this.scoreLabel.render(ctx);
+    this.livesLabel.render(ctx);
+    this.collisionDetection();
+    this.ball.moveBall();
+    this.movePaddle();
+    this.collisionsWithCanvasAndPaddle();
+
+    requestAnimationFrame(() => {
+      this.draw();
+    });
+  }
+
+  setup() {
+    this.livesLabel.value = 3;
+    this.resetBallAndPaddle();
+    document.addEventListener('keydown', (evt) => {
+      this.keyDownHandler(evt);
+    }, false);
+    document.addEventListener('keyup', (evt) => {
+      this.keyUpHandler(evt);
+    }, false);
+    document.addEventListener('mousemove', (evt) => {
+      this.mouseMoveHandler(evt);
+    }, false);
+  }
 }
 
-draw();
+const breakout = new Game();
