@@ -7,19 +7,11 @@ const ctx = canvas.getContext('2d');
 const ballColor = 'blue';
 
 // const ballRadius = 10;
-const paddleHeight = 10;
-const paddleWidth = 55;
-const brickRowCount = 3;
-const startBrickColumnCount = 5;
+
+// const startBrickColumnCount = 5;
 // const startBrickWidth = 75;
 // let brickWidth = startBrickWidth;
-const brickWidth = 75;
-const brickHeight = 20;
-const brickPadding = 10;
-const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
-const paddleX = (canvas.width - paddleWidth) / 2;
-const paddleY = (canvas.height - paddleHeight);
+
 // const brickColumnCount = startBrickColumnCount;
 
 class Ball {
@@ -66,10 +58,16 @@ class Brick {
 }
 
 class Bricks {
-  constructor(cols, rows) {
+  constructor(cols, rows, width, height, padding, offsetTop, offsetLeft, color) {
     this.cols = cols;
     this.rows = rows;
     this.bricks = [];
+    this.width = width;
+    this.height = height;
+    this.padding = padding;
+    this.offsetTop = offsetTop;
+    this.offsetLeft = offsetLeft;
+    this.color = color;
     this.initializeBricks();
   }
 
@@ -77,9 +75,9 @@ class Bricks {
     for (let c = 0; c < this.cols; c += 1) {
       this.bricks[c] = [];
       for (let r = 0; r < this.rows; r += 1) {
-        const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-        this.bricks[c][r] = new Brick(brickX, brickY, brickWidth, brickHeight, 'blue');
+        const brickX = (c * (this.width + this.padding)) + this.offsetLeft;
+        const brickY = (r * (this.height + this.padding)) + this.offsetTop;
+        this.bricks[c][r] = new Brick(brickX, brickY, this.width, this.height, this.color);
       }
     }
   }
@@ -185,8 +183,39 @@ class GameLabel {
 class Game {
   constructor() {
     this.ball = new Ball(0, 0, 2, 2, 10, 'blue');
-    this.bricks = new Bricks(startBrickColumnCount, brickRowCount);
-    this.paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 'blue');
+
+    // values for Bricks
+    this.brickRowCount = 3;
+    this.brickColumnCount = 5;
+    this.brickWidth = 75;
+    this.brickHeight = 20;
+    this.brickPadding = 10;
+    this.brickOffsetTop = 30;
+    this.brickOffsetLeft = 30;
+    this.color = 'blue';
+    this.bricks = new Bricks(
+      this.brickColumnCount,
+      this.brickRowCount,
+      this.width,
+      this.height,
+      this.padding,
+      this.offsetTop,
+      this.offsetLeft,
+      this.color,
+    );
+
+    // values for Paddle
+    this.paddleHeight = 10;
+    this.paddleWidth = 55;
+    this.paddleX = (canvas.width - this.width) / 2;
+    this.paddleY = (canvas.height - this.height);
+    this.paddle = new Paddle(
+      this.paddleX,
+      this.paddleY,
+      this.paddleWidth,
+      this.paddleHeight,
+      this.color,
+    );
     this.scoreLabel = new GameLabel('Score: ', 8, 20);
     this.livesLabel = new GameLabel('Lives: ', canvas.width - 65, 20);
     this.rightPressed = false;
@@ -200,7 +229,7 @@ class Game {
     this.ball.y = canvas.height - 30;
     this.ball.dx = 2;
     this.ball.dy = -2;
-    this.paddle.x = paddleX;
+    this.paddle.x = this.paddleX;
   }
 
   randomColor() {
@@ -218,9 +247,9 @@ class Game {
         const brick = this.bricks.bricks[c][r];
         if (brick.status === 1) {
           if (this.ball.x > brick.x - this.ball.ballRadius
-            && this.ball.x < brick.x + brickWidth + this.ball.ballRadius
+            && this.ball.x < brick.x + this.brickWidth + this.ball.ballRadius
             && this.ball.y > brick.y - this.ball.ballRadius
-            && this.ball.y < brick.y + brickHeight + this.ball.ballRadius
+            && this.ball.y < brick.y + this.brickHeight + this.ball.ballRadius
           ) {
             this.ball.dy = -(this.ball.dy + 1);
             if (this.ball.dx < 0) {
@@ -325,7 +354,7 @@ class Game {
   mouseMoveHandler(evt) {
     this.relativeX = evt.clientX - canvas.offsetLeft;
     if (this.relativeX > 0 && this.relativeX < (canvas.width - this.paddle.width / 2)) {
-      this.paddle.moveTo(this.relativeX - this.paddle.width / 2, paddleY);
+      this.paddle.moveTo(this.relativeX - this.paddle.width / 2, this.paddleY);
     }
   }
 
