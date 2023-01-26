@@ -6,12 +6,6 @@ class Sprite {
     this.width = width;
     this.height = height;
     this.color = color;
-    this.debug();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  debug() {
-    console.log('sprite loaded');
   }
 
   moveBy(dx, dy) {

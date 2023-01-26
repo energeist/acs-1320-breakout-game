@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 /* eslint-disable import/extensions */
 /* eslint-disable no-console */
@@ -28,8 +29,8 @@ class Game {
     this.ball = new Ball(100, 200, 2, -2, this.ballRadius, this.ballColor);
 
     // values for Paddle
-    this.paddleHeight = 10;
-    this.paddleWidth = 55;
+    this.paddleHeight = 15;
+    this.paddleWidth = 100;
     this.paddleSpeed = 7;
     this.paddleColor = 'blue';
     this.paddleX = (canvas.width - this.width) / 2;
@@ -60,12 +61,6 @@ class Game {
     this.leftPressed = false;
     this.setup();
     this.draw();
-    this.debug();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  debug() {
-    console.log('game loaded');
   }
 
   resetBallAndPaddle() {
@@ -95,13 +90,20 @@ class Game {
             && this.ball.y > brick.y - this.ball.radius
             && this.ball.y < brick.y + this.height + this.ball.radius
           ) {
-            this.ball.dy = -(this.ball.dy + 1);
+            this.ball.dy = (Math.abs(this.ball.dy) + 0.2);
             if (this.ball.dx < 0) {
               this.ball.dx -= 0.1;
             } else {
               this.ball.dx += 0.1;
             }
             brick.status = 0;
+            this.scoreLabel.value += 1;
+            this.paddle.width -= 3;
+            console.log(this.bricks.totalBricks);
+            if (this.scoreLabel.value === this.bricks.totalBricks) {
+              alert(`You win! Your final score is ${this.scoreLabel.value} points.`);
+              document.location.reload();
+            }
           }
         }
       }
@@ -150,7 +152,7 @@ class Game {
     if (this.rightPressed && this.paddle.x < this.canvas.width - this.paddle.width) {
       this.paddle.moveBy(7, 0);
     } else if (this.leftPressed && this.paddle.x > 0) {
-      this.paddle.moveBy(0, 7);
+      this.paddle.moveBy(-7, 0);
     }
   }
 
@@ -204,7 +206,6 @@ class Game {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
     // add gradient
     const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
     gradient.addColorStop(0, 'violet');
@@ -214,7 +215,6 @@ class Game {
     gradient.addColorStop(1, 'violet');
     this.ctx.fillStyle = gradient;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
     this.ball.render(this.ctx);
     this.paddle.render(this.ctx);
     this.bricks.render(this.ctx);
@@ -224,7 +224,6 @@ class Game {
     this.ball.moveBall();
     this.movePaddle();
     this.collisionsWithCanvasAndPaddle();
-
     requestAnimationFrame(() => {
       this.draw();
     });

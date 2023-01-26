@@ -8,12 +8,6 @@ class GameLabel extends Sprite {
     this.text = text;
     this.value = 0;
     this.font = font;
-    this.debug();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  debug() {
-    console.log('gamelabel loaded');
   }
 
   render(ctx) {

@@ -8,12 +8,6 @@ class Ball extends Sprite {
     this.dy = -dy;
     this.radius = radius;
     this.color = color;
-    this.debug();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  debug() {
-    console.log('ball loaded');
   }
 
   moveBall() {

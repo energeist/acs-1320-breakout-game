@@ -6,12 +6,6 @@ class Paddle extends Sprite {
     super(x, y, width, height, color);
     this.speed = speed;
     this.color = color;
-    this.debug();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  debug() {
-    console.log('paddle loaded');
   }
 }
 
