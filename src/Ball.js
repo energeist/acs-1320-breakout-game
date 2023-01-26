@@ -2,16 +2,22 @@
 import Sprite from './Sprite.js';
 
 class Ball extends Sprite {
-  constructor(x = 0, y = 0, radius = 10, color = '#0095DD') {
+  constructor(x = 0, y = 0, dx = 2, dy = -1, radius = 10, color = 'red') {
     super(x, y, 0, 0, color);
+    this.dx = dx;
+    this.dy = -dy;
     this.radius = radius;
-    this.dx = 2;
-    this.dy = -2;
+    this.color = color;
+    this.debug();
   }
 
-  move() {
-    this.x += this.dx;
-    this.y += this.dy;
+  // eslint-disable-next-line class-methods-use-this
+  debug() {
+    console.log('ball loaded');
+  }
+
+  moveBall() {
+    this.moveBy(this.dx, this.dy);
   }
 
   render(ctx) {

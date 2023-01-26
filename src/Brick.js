@@ -2,20 +2,15 @@
 import Sprite from './Sprite.js';
 
 class Brick extends Sprite {
-  constructor(x, y, width = 75, height = 20, color = '#0095DD') {
+  constructor(x, y, width = 75, height = 20, color = 'blue') {
     super(x, y, width, height, color);
     this.status = 1;
+    this.debug();
   }
-}
 
-const bricks = [];
-const brickColumnCount = 0;
-const brickRowCount = 0;
-
-for (let c = 0; c < brickColumnCount; c += 1) {
-  bricks[c] = [];
-  for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c][r] = new Brick(0, 0);
+  // eslint-disable-next-line class-methods-use-this
+  debug() {
+    console.log('brick loaded');
   }
 }
 
