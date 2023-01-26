@@ -28,6 +28,13 @@ class Bricks {
         // console.log(r, c);
         const brickX = (c * (this.width + this.padding)) + this.offsetLeft;
         const brickY = (r * (this.height + this.padding)) + this.offsetTop;
+        console.log(c, r);
+        console.log(this.width);
+        console.log(this.padding);
+        console.log(this.offsetLeft);
+        console.log(this.offsetTop);
+        console.log(brickX);
+        console.log(brickY);
         this.bricks[c][r] = new Brick(brickX, brickY, this.width, this.height, this.color);
       }
     }

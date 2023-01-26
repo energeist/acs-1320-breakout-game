@@ -15,11 +15,11 @@ class Game {
     // values for Bricks
     this.brickRowCount = 3;
     this.brickColumnCount = 5;
-    this.brickWidth = 75;
-    this.brickHeight = 20;
-    this.brickPadding = 10;
-    this.brickOffsetTop = 30;
-    this.brickOffsetLeft = 30;
+    this.width = 75;
+    this.height = 20;
+    this.padding = 10;
+    this.offsetTop = 30;
+    this.offsetLeft = 30;
     this.color = 'blue';
 
     // values for Ball
@@ -90,10 +90,10 @@ class Game {
       for (let r = 0; r < this.bricks.rows; r += 1) {
         const brick = this.bricks.bricks[c][r];
         if (brick.status === 1) {
-          if (this.ball.x > brick.x - this.ball.ballRadius
-            && this.ball.x < brick.x + this.brickWidth + this.ball.ballRadius
-            && this.ball.y > brick.y - this.ball.ballRadius
-            && this.ball.y < brick.y + this.brickHeight + this.ball.ballRadius
+          if (this.ball.x > brick.x - this.ball.radius
+            && this.ball.x < brick.x + this.width + this.ball.radius
+            && this.ball.y > brick.y - this.ball.radius
+            && this.ball.y < brick.y + this.height + this.ball.radius
           ) {
             this.ball.dy = -(this.ball.dy + 1);
             if (this.ball.dx < 0) {
@@ -226,7 +226,6 @@ class Game {
     this.collisionsWithCanvasAndPaddle();
 
     requestAnimationFrame(() => {
-      console.table(this.bricks);
       this.draw();
     });
   }
