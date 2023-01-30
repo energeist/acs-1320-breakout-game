@@ -212,7 +212,7 @@ class Game {
     const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
     gradient.addColorStop(0, 'violet');
     gradient.addColorStop(0.25, 'pink');
-    gradient.addColorStop(0.5, 'red');
+    gradient.addColorStop(0.5, 'black');
     gradient.addColorStop(0.75, 'pink');
     gradient.addColorStop(1, 'violet');
     this.ctx.fillStyle = gradient;

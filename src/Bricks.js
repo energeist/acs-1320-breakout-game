@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/extensions */
 import Brick from './Brick.js';
 
@@ -32,12 +33,14 @@ class Bricks {
     //   }
     // }
 
+    const brickColors = ['#FF0000', '#FF9900', '#FFFF00', '#66FF33', '#00FFFF', '#0000FF', '#6600FF', '#6600CC', '#CC0099', '#FF0066'];
+
     for (let c = 0; c < this.cols; c += 1) {
       this.bricks[c] = [];
       for (let r = 0; r < this.rows; r += 1) {
         const brickX = (c * (this.width + this.padding)) + this.offsetLeft;
         const brickY = (r * (this.height + this.padding)) + this.offsetTop;
-        this.bricks[c][r] = new Brick(brickX, brickY, this.width, this.height, this.color);
+        this.bricks[c][r] = new Brick(brickX, brickY, this.width, this.height, brickColors[this.totalBricks % brickColors.length]);
         this.totalBricks += 1;
       }
     }
