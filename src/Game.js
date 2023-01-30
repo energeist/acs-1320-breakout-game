@@ -96,6 +96,7 @@ class Game {
             } else {
               this.ball.dx += 0.1;
             }
+            this.ball.color = this.randomColor();
             brick.status = 0;
             this.scoreLabel.value += 1;
             this.paddle.width -= 3;
@@ -169,6 +170,7 @@ class Game {
       if (this.ball.x > this.paddle.x && this.ball.x < this.paddle.x + this.paddle.width) {
         this.ball.dy = -(this.ball.dy + 1);
         this.ball.color = this.randomColor();
+        this.paddle.color = this.randomColor();
       } else {
         this.livesLabel.value -= 1;
         if (this.livesLabel.value === 0) {

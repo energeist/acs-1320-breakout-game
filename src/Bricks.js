@@ -17,6 +17,21 @@ class Bricks {
   }
 
   initializeBricks() {
+    // for (let r = 0; r < this.rows; r += 1) {
+    //   this.bricks[r] = [];
+    //   console.log(this.cols);
+    //   if (r % 2 === 0) {
+    //     this.cols *= 2;
+    //     this.width = (this.width / 2) - this.padding;
+    //   }
+    //   for (let c = 0; c < this.cols; c += 1) {
+    //     const brickX = (c * (this.width + this.padding)) + this.offsetLeft;
+    //     const brickY = (r * (this.height + this.padding)) + this.offsetTop;
+    //     this.bricks[r][c] = new Brick(brickX, brickY, this.width, this.height, this.color);
+    //     this.totalBricks += 1;
+    //   }
+    // }
+
     for (let c = 0; c < this.cols; c += 1) {
       this.bricks[c] = [];
       for (let r = 0; r < this.rows; r += 1) {
