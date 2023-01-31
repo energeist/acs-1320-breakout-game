@@ -18,10 +18,11 @@ Install my-project with npm
 ## Folder Structure
 
 ```bash
-|- package.json
-|- webpack.config.js
+|- /dist
+  |- bundle.js
+  |- index.html
+  |- styles.css
 |- /src
-  |- main.js
   |- Ball.js
   |- Brick.js
   |- Bricks.js
@@ -29,10 +30,11 @@ Install my-project with npm
   |- GameLabel.js
   |- Paddle.js
   |- Sprite.js
-|- /dist
-  |- bundle.js
-  |- index.html
-  |- styles.css
+  |- main.js
+|- README.md
+|- package.json
+|- webpack.config.js
+
 ```
 ## Run Locally
 
@@ -70,8 +72,7 @@ To control the paddle, you can either:
 
 ## Demo Video
 
-
-## Badges
+https://user-images.githubusercontent.com/111889289/215862689-681c07d0-5b4f-4bd9-a254-6f7dfa12e584.mp4
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
