@@ -70,6 +70,7 @@ To control the paddle, you can either:
 
 ## Demo Video
 
+
 ## Badges
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
