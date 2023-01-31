@@ -4,7 +4,7 @@
 
 An object-oriented JS Breakout clone!
 
-Written by [@energist](Mark Rattle for ACS-1320 - Javascript Foundations
+Written by Mark Rattle ([@energeist](https://www.github.com/energeist)) for ACS-1320 - Javascript Foundations
 
 ## Installation
 
