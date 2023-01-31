@@ -72,7 +72,5 @@ To control the paddle, you can either:
 
 https://user-images.githubusercontent.com/111889289/215862689-681c07d0-5b4f-4bd9-a254-6f7dfa12e584.mp4
 
-## Badges
-
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
