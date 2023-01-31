@@ -3,13 +3,71 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-console */
 
-import Ball from './Ball.js';
-import Bricks from './Bricks.js';
-import Paddle from './Paddle.js';
-import GameLabel from './GameLabel.js';
+import { Ball, BallProps } from './Ball';
+import { Bricks, BricksProps } from './Bricks';
+import { Paddle, PaddleProps } from './Paddle';
+import { GameLabel, GameLabelProps } from './GameLabel';
 
-class Game {
-  constructor(canvas, ctx) {
+export interface GameProps {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  brickRowCount: number;
+  brickColumnCount: number;
+  width: number;
+  height: number;
+  padding: number;
+  offsetTop: number;
+  offsetLeft: number;
+  color: string;
+  ballRadius: number;
+  ballColor: string;
+  ball: Ball;
+  paddleHeight: number;
+  paddleWidth: number;
+  paddleSpeed: number;
+  paddleColor: string;
+  paddleX: number;
+  paddleY: number;
+  paddle: Paddle;
+  bricks: Bricks;
+  scoreLabel: GameLabel;
+  livesLabel: GameLabel;
+  rightPressed: boolean;
+  leftPressed: boolean;
+  hexString: string;
+  relativeX: number;
+}
+
+export class Game implements GameProps {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  brickRowCount: number;
+  brickColumnCount: number;
+  width: number;
+  height: number;
+  padding: number;
+  offsetTop: number;
+  offsetLeft: number;
+  color: string;
+  ballRadius: number;
+  ballColor: string;
+  ball: Ball;
+  paddleHeight: number;
+  paddleWidth: number;
+  paddleSpeed: number;
+  paddleColor: string;
+  paddleX: number;
+  paddleY: number;
+  paddle: Paddle;
+  bricks: Bricks;
+  scoreLabel: GameLabel;
+  livesLabel: GameLabel;
+  rightPressed: boolean;
+  leftPressed: boolean;
+  hexString: string;
+  relativeX: number;
+
+  constructor(canvas:HTMLCanvasElement, ctx:CanvasRenderingContext2D) {
     this.canvas = canvas;
     this.ctx = ctx;
 
@@ -40,8 +98,8 @@ class Game {
       this.paddleY,
       this.paddleWidth,
       this.paddleHeight,
-      this.paddleSpeed,
       this.paddleColor,
+      this.paddleSpeed,
     );
 
     this.bricks = new Bricks(
@@ -183,7 +241,7 @@ class Game {
     }
   }
 
-  keyDownHandler(evt) {
+  keyDownHandler(evt: KeyboardEvent) {
     if (evt.key === 'Right' || evt.key === 'ArrowRight') {
       this.rightPressed = true;
     } else if (evt.key === 'Left' || evt.key === 'ArrowLeft') {
@@ -191,7 +249,7 @@ class Game {
     }
   }
 
-  keyUpHandler(evt) {
+  keyUpHandler(evt: KeyboardEvent) {
     if (evt.key === 'Right' || evt.key === 'ArrowRight') {
       this.rightPressed = false;
     } else if (evt.key === 'Left' || evt.key === 'ArrowLeft') {
@@ -199,7 +257,7 @@ class Game {
     }
   }
 
-  mouseMoveHandler(evt) {
+  mouseMoveHandler(evt: MouseEvent) {
     this.relativeX = evt.clientX - this.canvas.offsetLeft;
     if (this.relativeX > 0 && this.relativeX < (this.canvas.width - this.paddle.width / 2)) {
       this.paddle.moveTo(this.relativeX - this.paddle.width / 2, this.paddleY);

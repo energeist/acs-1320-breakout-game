@@ -1,9 +1,28 @@
 /* eslint-disable max-len */
 /* eslint-disable import/extensions */
-import Brick from './Brick.js';
+import { Brick, BrickProps } from './Brick';
 
-class Bricks {
-  constructor(cols, rows, width, height, padding, offsetTop, offsetLeft, color) {
+export interface BricksProps {
+  cols: number;
+  rows: number;
+  bricks: Brick[][];
+  width: number;
+  height: number;
+  padding: number;
+  offsetTop: number;
+  offsetLeft: number;
+  color: string;
+  totalBricks: number;
+  initializeBricks(): void;
+  render(ctx: CanvasRenderingContext2D): void;
+}
+
+export class Bricks implements BricksProps {
+  bricks: Brick[][]
+  totalBricks: number
+  ctx: CanvasRenderingContext2D;
+
+  constructor(public cols: number, public rows:number, public width: number, public height: number , readonly padding: number, readonly offsetTop: number, readonly offsetLeft: number, public color: string) {
     this.cols = cols;
     this.rows = rows;
     this.bricks = [];
@@ -46,7 +65,7 @@ class Bricks {
     }
   }
 
-  render(ctx) {
+  render(ctx: CanvasRenderingContext2D) {
     for (let c = 0; c < this.cols; c += 1) {
       for (let r = 0; r < this.rows; r += 1) {
         const brick = this.bricks[c][r];
@@ -57,5 +76,3 @@ class Bricks {
     }
   }
 }
-
-export default Bricks;
