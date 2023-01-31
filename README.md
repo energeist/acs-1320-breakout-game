@@ -70,6 +70,7 @@ To control the paddle, you can either:
 
 ## Demo Video
 
+https://user-images.githubusercontent.com/111889289/215862689-681c07d0-5b4f-4bd9-a254-6f7dfa12e584.mp4
 
 ## Badges
 
